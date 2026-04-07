@@ -105,7 +105,11 @@ public class UserService implements GetUserService, CreateUserService, DeleteUse
     //============================ DELETE REQUEST ==============================
     @Override
     public UserEntityDto userDeleteLogin(String email) {
-        return null;
+        log.info(FIND_USER_BY_EMAIL_DELETE_MESSAGE_LOGGER_SERVICE);
+        UserEntity entity = repository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION));
+        repository.delete(entity);
+        return UserMapper.toUserEntityDto(entity);
     }
 
 
