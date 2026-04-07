@@ -35,6 +35,7 @@ import java.util.List;
 @Service
 public class UserService implements GetUserService, CreateUserService, DeleteUserService, UpdateUserService {
 
+
     RoleRepository roleRepository;
     UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -106,8 +107,12 @@ public class UserService implements GetUserService, CreateUserService, DeleteUse
     @Override
     public UserEntityDto userDeleteLogin(String email) {
         log.info(FIND_USER_BY_EMAIL_DELETE_MESSAGE_LOGGER_SERVICE);
-        UserEntity entity = repository.findByEmail(email)
+        var entity = repository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION));
+
+        if(entity.getRole().equals(Role.ADMIN)){
+            new IllegalStateException("Cannot delete ADMIN the account");
+        }
         repository.delete(entity);
         return UserMapper.toUserEntityDto(entity);
     }
