@@ -1,42 +1,41 @@
 package ru.myblog.usersservice.repository;
 
-
-
 import ru.myblog.commonlib.user.Role;
 import ru.myblog.commonlib.user.UserEntityDto;
 
 public class UserMapper {
     public static UserEntityDto toUserEntityDto(UserEntity userEntity) {
-
-        if (userEntity == null)return null;
-
         Long userEntityUserId = userEntity.getUserId();
         String userEntityUserName = userEntity.getUserName();
         String userEntityEmail = userEntity.getEmail();
         String userEntityPassword = userEntity.getPassword();
         String userEntityAboutMe = userEntity.getAboutMe();
         Role userEntityRole = userEntity.getRole();
-
-        UserEntityDto userEntityDto = new UserEntityDto(
+        UserEntityDto userEntityDto1 = new UserEntityDto(
+                userEntityUserId,
                 userEntityUserName,
                 userEntityEmail,
                 userEntityPassword,
-                userEntityAboutMe,
-                userEntityRole
+                userEntityAboutMe
+
         );
-        return userEntityDto;
+        return userEntityDto1;
     }
 
-    public static UserEntity toEntity(UserEntityDto userDto) {
-        if (userDto == null) return null;
+    public static UserEntity toEntity(UserEntityDto userEntityDto) {
+        Long userEntityDto1UserId = userEntityDto.getUserId();
+        String userEntityDto1UserName = userEntityDto.getUserName();
+        String userEntityDto1Email = userEntityDto.getEmail();
+        String userEntityDto1Password = userEntityDto.getPassword();
+        String userEntityDto1AboutMe = userEntityDto.getAboutMe();
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setUserName(userDto.getUsername());
-        userEntity.setEmail(userDto.getEmail());
-        userEntity.setPassword(userDto.getPassword());
-        userEntity.setAboutMe(userDto.getAboutMe());
-        userEntity.setRole(userDto.getRole());
+        userEntity.setUserId(userEntityDto1UserId);
+        userEntity.setUserName(userEntityDto1UserName);
+        userEntity.setEmail(userEntityDto1Email);
+        userEntity.setPassword(userEntityDto1Password);
+        userEntity.setAboutMe(userEntityDto1AboutMe);
+
         return userEntity;
     }
 }
-

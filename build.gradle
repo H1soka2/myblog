@@ -31,7 +31,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     //security
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     // DTO из common-lib
     implementation 'ru.My-blog:common-lib:0.0.1-SNAPSHOT'
 

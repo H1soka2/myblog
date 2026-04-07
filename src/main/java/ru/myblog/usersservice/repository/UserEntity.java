@@ -7,11 +7,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "final_user")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserEntity {
