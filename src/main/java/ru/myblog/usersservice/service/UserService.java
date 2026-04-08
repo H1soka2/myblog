@@ -2,12 +2,9 @@ package ru.myblog.usersservice.service;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,10 +14,8 @@ import ru.myblog.commonlib.exception.UserNotFoundException;
 import ru.myblog.commonlib.user.Role;
 import ru.myblog.commonlib.user.UserEntityDto;
 import ru.myblog.commonlib.user.service.CreateUserService;
-import ru.myblog.commonlib.user.service.DeleteUserService;
 import ru.myblog.commonlib.user.service.GetUserService;
 import ru.myblog.commonlib.user.service.UpdateUserService;
-import ru.myblog.usersservice.repository.RoleRepository;
 import ru.myblog.usersservice.repository.UserEntity;
 import ru.myblog.usersservice.repository.UserMapper;
 import ru.myblog.usersservice.repository.UserRepository;
@@ -37,8 +32,6 @@ import java.util.List;
 @Service
 public class UserService implements GetUserService, CreateUserService, UpdateUserService {
 
-
-    RoleRepository roleRepository;
     UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
@@ -79,7 +72,7 @@ public class UserService implements GetUserService, CreateUserService, UpdateUse
     }
 
     //============================ POST REQUEST ==============================
-    
+
     @Override
     public UserEntityDto createUser(UserEntityDto createUser) {
         log.info("Create user. Username: {}, Email: {}",
@@ -87,23 +80,23 @@ public class UserService implements GetUserService, CreateUserService, UpdateUse
                 createUser.getEmail()
         );
         UserEntity user = new UserEntity();
-        user.setUserName(createUser.getUserName());
+        user.setUsername(createUser.getUserName());
         user.setEmail(createUser.getEmail());
         user.setPassword(passwordEncoder.encode(createUser.getPassword()));
         user.setAboutMe(createUser.getAboutMe());
 
-        Role defaultRole = roleRepository.findByRole(Role.USER)
-                .orElseThrow(() -> new RuntimeException("Default role not found"));
-        user.setRole(defaultRole);
+        // Присваиваем роль напрямую
+        user.setRole(Role.USER);
 
         UserEntity savedUser = repository.save(user);
 
         return new UserEntityDto(
                 savedUser.getUserId(),
-                savedUser.getUserName(),
+                savedUser.getUsername(),
                 savedUser.getEmail(),
                 null,                       // пароль не возвращаем
                 savedUser.getAboutMe()
+
         );
     }
 

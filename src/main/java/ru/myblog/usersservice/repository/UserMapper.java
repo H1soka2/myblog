@@ -6,7 +6,7 @@ import ru.myblog.commonlib.user.UserEntityDto;
 public class UserMapper {
     public static UserEntityDto toUserEntityDto(UserEntity userEntity) {
         Long userEntityUserId = userEntity.getUserId();
-        String userEntityUserName = userEntity.getUserName();
+        String userEntityUserName = userEntity.getUsername();
         String userEntityEmail = userEntity.getEmail();
         String userEntityPassword = userEntity.getPassword();
         String userEntityAboutMe = userEntity.getAboutMe();
@@ -17,6 +17,7 @@ public class UserMapper {
                 userEntityEmail,
                 userEntityPassword,
                 userEntityAboutMe
+
 
         );
         return userEntityDto1;
@@ -31,7 +32,7 @@ public class UserMapper {
 
         UserEntity userEntity = new UserEntity();
         userEntity.setUserId(userEntityDto1UserId);
-        userEntity.setUserName(userEntityDto1UserName);
+        userEntity.setUsername(userEntityDto1UserName);
         userEntity.setEmail(userEntityDto1Email);
         userEntity.setPassword(userEntityDto1Password);
         userEntity.setAboutMe(userEntityDto1AboutMe);

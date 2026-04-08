@@ -23,7 +23,7 @@ public class UserEntity {
     Long userId;
 
     @Column(name = "user_name", unique = true, nullable = false)
-    String userName;
+    String username;
 
     @Column(name = "email",unique = true, nullable = false)
     String email;
@@ -32,7 +32,7 @@ public class UserEntity {
     String password;
 
     @Column(name = "about me", length = 255)
-    String AboutMe;
+    String aboutMe;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)

@@ -33,6 +33,7 @@ dependencies {
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // DTO из common-lib
+
     implementation 'ru.My-blog:common-lib:0.0.1-SNAPSHOT'
 
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
