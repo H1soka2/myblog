@@ -13,6 +13,7 @@ import ru.myblog.commonlib.constant.ExceptionTextMessageConstant;
 import ru.myblog.commonlib.exception.UserNotFoundException;
 import ru.myblog.commonlib.user.Role;
 import ru.myblog.commonlib.user.UserEntityDto;
+import ru.myblog.commonlib.user.UserResponseDto;
 import ru.myblog.commonlib.user.service.CreateUserService;
 import ru.myblog.commonlib.user.service.GetUserService;
 import ru.myblog.commonlib.user.service.UpdateUserService;
@@ -38,36 +39,36 @@ public class UserService implements GetUserService, CreateUserService, UpdateUse
 
     //============================ GET REQUEST ==============================
     @Override
-    public UserEntityDto findById(Long id) {
-        UserEntityDto findAll = repository.findById(id)
-                .map(UserMapper::toUserEntityDto)
+    public UserResponseDto findById(Long id) {
+        UserResponseDto findAll = repository.findById(id)
+                .map(UserMapper::toUserResponseDto)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION));
         return findAll;
     }
 
     @Override
-    public UserEntityDto findByEmail(String email) {
+    public UserResponseDto findByEmail(String email) {
         log.info(FIND_USER_BY_EMAIL_MESSAGE_LOGGER_SERVICE, email);
-        UserEntityDto findEmail = repository.findByEmail(email)
-                .map(UserMapper :: toUserEntityDto)
+        UserResponseDto findEmail = repository.findByEmail(email)
+                .map(UserMapper :: toUserResponseDto)
                 .orElseThrow(() -> new UserNotFoundException(ExceptionTextMessageConstant.USER_NOT_FOUND_EXCEPTION));
         return findEmail;
     }
 
     @Override
-    public UserEntityDto findByUsername(String username) {
+    public UserResponseDto findByUsername(String username) {
         log.info(FIND_USER_BY_USERNAME_MESSAGE_LOGGER_SERVICE,username);
-        UserEntityDto findUsername = repository.findByUsername(username)
-                .map(UserMapper :: toUserEntityDto)
+        UserResponseDto findUsername = repository.findByUsername(username)
+                .map(UserMapper :: toUserResponseDto)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION));
         return findUsername;
     }
 
     @Override
-    public List<UserEntityDto> findByAll() {
+    public List<UserResponseDto> findByAll() {
         return repository.findAll()
                 .stream()
-                .map(UserMapper::toUserEntityDto)
+                .map(UserMapper::toUserResponseDto)
                 .toList();
     }
 

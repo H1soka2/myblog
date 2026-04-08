@@ -2,6 +2,7 @@ package ru.myblog.usersservice.repository;
 
 import ru.myblog.commonlib.user.Role;
 import ru.myblog.commonlib.user.UserEntityDto;
+import ru.myblog.commonlib.user.UserResponseDto;
 
 public class UserMapper {
     public static UserEntityDto toUserEntityDto(UserEntity userEntity) {
@@ -11,7 +12,7 @@ public class UserMapper {
         String userEntityPassword = userEntity.getPassword();
         String userEntityAboutMe = userEntity.getAboutMe();
         Role userEntityRole = userEntity.getRole();
-        UserEntityDto userEntityDto1 = new UserEntityDto(
+        UserEntityDto userEntityDto = new UserEntityDto(
                 userEntityUserId,
                 userEntityUserName,
                 userEntityEmail,
@@ -20,7 +21,16 @@ public class UserMapper {
 
 
         );
-        return userEntityDto1;
+        return userEntityDto;
+    }
+
+    public static UserResponseDto toUserResponseDto(UserEntity userEntity) {
+        return new UserResponseDto(
+                userEntity.getUserId(),
+                userEntity.getUsername(),
+                userEntity.getEmail(),
+                userEntity.getAboutMe()
+        );
     }
 
     public static UserEntity toEntity(UserEntityDto userEntityDto) {
