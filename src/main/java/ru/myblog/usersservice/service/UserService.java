@@ -7,6 +7,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +35,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 @Service
-public class UserService implements GetUserService, CreateUserService, DeleteUserService, UpdateUserService {
+public class UserService implements GetUserService, CreateUserService, UpdateUserService {
 
 
     RoleRepository roleRepository;
@@ -47,7 +49,7 @@ public class UserService implements GetUserService, CreateUserService, DeleteUse
         UserEntityDto findAll = repository.findById(id)
                 .map(UserMapper::toUserEntityDto)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION));
-        return null;
+        return findAll;
     }
 
     @Override
@@ -80,7 +82,10 @@ public class UserService implements GetUserService, CreateUserService, DeleteUse
     
     @Override
     public UserEntityDto createUser(UserEntityDto createUser) {
-        log.info(SAVE_USER_MESSAGE_LOGGER_SERVICE, createUser);
+        log.info("Create user. Username: {}, Email: {}",
+                createUser.getUserName(),
+                createUser.getEmail()
+        );
         UserEntity user = new UserEntity();
         user.setUserName(createUser.getUserName());
         user.setEmail(createUser.getEmail());
@@ -104,17 +109,22 @@ public class UserService implements GetUserService, CreateUserService, DeleteUse
 
 
     //============================ DELETE REQUEST ==============================
-    @Override
-    public UserEntityDto userDeleteLogin(String email) {
-        log.info(FIND_USER_BY_EMAIL_DELETE_MESSAGE_LOGGER_SERVICE);
-        var entity = repository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION));
 
-        if(entity.getRole().equals(Role.ADMIN)){
-            new IllegalStateException("Cannot delete ADMIN the account");
+
+    public void deleteCurrentUser() {
+
+        String currentUserEmail = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        UserEntity entity = repository.findByEmail(currentUserEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (entity.getRole().equals(Role.ADMIN)) {
+            throw new IllegalStateException("Cannot delete ADMIN account");
         }
+
         repository.delete(entity);
-        return UserMapper.toUserEntityDto(entity);
     }
 
 
